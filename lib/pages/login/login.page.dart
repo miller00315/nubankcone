@@ -1,8 +1,11 @@
 import 'dart:ui';
 
 import 'package:drawer_app/pages/login/widgets/form.field.main.dart';
+import 'package:drawer_app/src/bloc/authentication/authentication.bloc.dart';
+import 'package:drawer_app/src/bloc/authentication/authentication.bloc.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:drawer_app/src/utils/values/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const double min_height = 60.0;
 const double max_height = 450.0;
@@ -14,6 +17,7 @@ const double max_forms_container_margin = 80;
 const double min_forms_container_margin = 10;
 
 class LoginPage extends StatefulWidget {
+  static const String routeName = "LoginPage";
   @override
   _LoginPageState createState() => new _LoginPageState();
 }
@@ -24,12 +28,24 @@ class _LoginPageState extends State<LoginPage>
   void initState() {
     super.initState();
 
+    SharedPreferences.getInstance().then((prefs) {
+      _prefs = prefs;
+    });
+
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 800),
     );
   }
 
+  @override
+  void didChangeDependencies() {
+    _authBloc = AuthenticationBlocProvider.of(context);
+    super.didChangeDependencies();
+  }
+
+  AuthenticationBloc _authBloc;
+  SharedPreferences _prefs;
   AnimationController _controller;
 
   bool _loginContainerOpened = false;
@@ -46,6 +62,7 @@ class _LoginPageState extends State<LoginPage>
   @override
   void dispose() {
     super.dispose();
+    _authBloc.dispose();
     _controller.dispose();
   }
 
@@ -101,7 +118,6 @@ class _LoginPageState extends State<LoginPage>
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: ColorConstant.colorMainPurple,
       resizeToAvoidBottomInset: false,
@@ -202,43 +218,82 @@ class _LoginPageState extends State<LoginPage>
                                                     child: Column(
                                                       children: <Widget>[
                                                         //Form Fields
-                                                        FormFieldMain(
-                                                          hintText: '..Email',
-                                                          onChange: (value) {},
-                                                          marginRight: 20,
-                                                          marginLeft: 20,
-                                                          marginTop: 0,
-                                                          textInputType:
-                                                              TextInputType
-                                                                  .emailAddress,
-                                                          obscured: false,
-                                                          key: Key('email'),
+                                                        StreamBuilder(
+                                                          stream:
+                                                              _authBloc.email,
+                                                          builder: (BuildContext
+                                                                  context,
+                                                              AsyncSnapshot
+                                                                  snapshot) {
+
+                                                            print(_authBloc.email.toString());
+                                                            return FormFieldMain(
+                                                              hintText:
+                                                                  '..Email',
+                                                              onChange: _authBloc
+                                                                  .changeEmail,
+                                                              errorText:
+                                                                  snapshot
+                                                                      .error,
+                                                              marginRight: 20,
+                                                              marginLeft: 20,
+                                                              marginTop: 0,
+                                                              textInputType:
+                                                                  TextInputType
+                                                                      .emailAddress,
+                                                              obscured: false,
+                                                              key: Key('email'),
+                                                            );
+                                                          },
                                                         ),
-                                                        FormFieldMain(
-                                                          hintText:
-                                                              '..Password',
-                                                          onChange: (value) {},
-                                                          marginRight: 20,
-                                                          marginLeft: 20,
-                                                          marginTop: 10,
-                                                          textInputType:
-                                                              TextInputType
-                                                                  .emailAddress,
-                                                          obscured: true,
-                                                          key: Key('password'),
+                                                        StreamBuilder(
+                                                          stream: _authBloc
+                                                              .password,
+                                                          builder: (BuildContext
+                                                                  context,
+                                                              AsyncSnapshot
+                                                                  snapshot) {
+                                                            return FormFieldMain(
+                                                              hintText:
+                                                                  '..Password',
+                                                              onChange: _authBloc
+                                                                  .changePassword,
+                                                              errorText:
+                                                                  snapshot
+                                                                      .error,
+                                                              marginRight: 20,
+                                                              marginLeft: 20,
+                                                              marginTop: 10,
+                                                              textInputType:
+                                                                  TextInputType
+                                                                      .emailAddress,
+                                                              obscured: true,
+                                                              key: Key(
+                                                                  'password'),
+                                                            );
+                                                          },
                                                         ),
-                                                        FormFieldMain(
-                                                          hintText:
-                                                              '..Name user',
-                                                          onChange: (value) {},
-                                                          marginRight: 20,
-                                                          marginLeft: 20,
-                                                          marginTop: 10,
-                                                          textInputType:
-                                                              TextInputType
-                                                                  .emailAddress,
-                                                          obscured: false,
-                                                          key: Key('name'),
+                                                        StreamBuilder(
+                                                          stream: _authBloc.displayName,
+                                                          builder: (BuildContext
+                                                                  context,
+                                                              AsyncSnapshot
+                                                                  snapshot) {
+                                                            return FormFieldMain(
+                                                              
+                                                              hintText:
+                                                                  '..Name user',
+                                                              onChange: _authBloc.changeDisplayName,
+                                                              marginRight: 20,
+                                                              marginLeft: 20,
+                                                              marginTop: 10,
+                                                              textInputType:
+                                                                  TextInputType
+                                                                      .text,
+                                                              obscured: false,
+                                                              key: Key('name'),
+                                                            );
+                                                          },
                                                         ),
                                                       ],
                                                     ),
@@ -252,7 +307,8 @@ class _LoginPageState extends State<LoginPage>
                                                     child: GestureDetector(
                                                       onTap: () {},
                                                       child: Container(
-                                                        alignment: Alignment.center,
+                                                        alignment:
+                                                            Alignment.center,
                                                         margin: EdgeInsets.only(
                                                             left: 30,
                                                             right: 30),
@@ -278,7 +334,8 @@ class _LoginPageState extends State<LoginPage>
                                                         child: Text(
                                                           'Register',
                                                           style: TextStyle(
-                                                            color: ColorConstant.colorMainPurple,
+                                                            color: ColorConstant
+                                                                .colorMainPurple,
                                                             fontWeight:
                                                                 FontWeight.w300,
                                                             fontSize: 25,
@@ -320,8 +377,7 @@ class _LoginPageState extends State<LoginPage>
                                 },
                                 child: AnimatedContainer(
                                   alignment: Alignment.center,
-                                  margin: EdgeInsets.only(
-                                      top: 0),
+                                  margin: EdgeInsets.only(top: 0),
                                   width: _loginContainerWidth,
                                   height: _loginContainerHeight,
                                   duration: Duration(milliseconds: 500),
@@ -398,7 +454,8 @@ class _LoginPageState extends State<LoginPage>
                                                     child: GestureDetector(
                                                       onTap: () {},
                                                       child: Container(
-                                                        alignment: Alignment.center,
+                                                        alignment:
+                                                            Alignment.center,
                                                         margin: EdgeInsets.only(
                                                             left: 30,
                                                             right: 30),
@@ -424,7 +481,8 @@ class _LoginPageState extends State<LoginPage>
                                                         child: Text(
                                                           'Login',
                                                           style: TextStyle(
-                                                            color: ColorConstant.colorMainPurple,
+                                                            color: ColorConstant
+                                                                .colorMainPurple,
                                                             fontWeight:
                                                                 FontWeight.w300,
                                                             fontSize: 25,

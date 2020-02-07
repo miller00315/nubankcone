@@ -1,4 +1,6 @@
+import 'package:drawer_app/pages/home/home.page.dart';
 import 'package:drawer_app/pages/login/login.page.dart';
+import 'package:drawer_app/root.page.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -14,9 +16,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
      // home: LoginPage(),
-      initialRoute: '/',
+      initialRoute: RootPage.routeName,
       routes: {
-        '/': (context) => LoginPage(),
+        RootPage.routeName: (context) => RootPage(),
+        LoginPage.routeName: (context) => LoginPage(),
+        HomePage.routeName: (context) => HomePage(),
       },
     );
   }

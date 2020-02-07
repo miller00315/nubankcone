@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "779572626244",
+    "firebase_url": "https://nufinance-e7049.firebaseio.com",
+    "project_id": "nufinance-e7049",
+    "storage_bucket": "nufinance-e7049.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:779572626244:android:3046576af1d1d6d6fdcd11",
+        "android_client_info": {
+          "package_name": "com.example.drawer_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "779572626244-52nudtem3r0ulasihida5geodm3hd2dg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.drawer_app",
+            "certificate_hash": "eecdfd391653e61c11c8a02714d09f769de8d1a7"
+          }
+        },
+        {
+          "client_id": "779572626244-1nhev1v3jaa5veoegafulhdjmbgtia0d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBg0G4WE5PoebzU05cLHs1gtPVjaofR0zE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "779572626244-1nhev1v3jaa5veoegafulhdjmbgtia0d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
