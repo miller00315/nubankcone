@@ -56,6 +56,8 @@ class AuthenticationBloc with Bloc {
       });
 
   bool validateEmailAndPassword() {
+    print(_email.value);
+    print(_password.value);
     if(
       _email.value != null &&
       _email.value.isNotEmpty &&
@@ -64,6 +66,7 @@ class AuthenticationBloc with Bloc {
       _password.value.isNotEmpty &&
       _password.value.length > 5
     ) {
+      
       return true;
     }
     return false;

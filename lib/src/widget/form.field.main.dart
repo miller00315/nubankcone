@@ -9,7 +9,7 @@ class FormFieldMain extends StatelessWidget {
   final TextInputType textInputType;
   final String hintText;
   final bool obscured;
-  final void Function(void) onChange;
+  final void Function(void) onChanged;
   final String errorText;
 
   const FormFieldMain(
@@ -21,7 +21,7 @@ class FormFieldMain extends StatelessWidget {
       @required this.textInputType,
       @required this.hintText,
       @required this.obscured,
-      @required this.onChange,
+      @required this.onChanged,
       this.errorText})
       : super(key: key);
 
@@ -31,7 +31,7 @@ class FormFieldMain extends StatelessWidget {
       margin: EdgeInsets.only(left: marginLeft, right: marginRight, top: marginTop),
       child: TextField(
         key: key,
-        onChanged: (value) {},
+        onChanged: onChanged,
         keyboardType: textInputType,
         obscureText: obscured,
         decoration: InputDecoration(
